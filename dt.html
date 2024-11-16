@@ -1,0 +1,49 @@
+Model the following Online shopping information as a document database. Consider online shopping where the customer can get different products from different brands. Customers can rate the brands and products.
+Assume appropriate attributes and collections as per the query requirements.
+Insert at least 5 documents in each collection.
+Answer the following Queries:
+a. List the names of products whose warranty period is one year.
+b. List the customers who have done purchases on “15/08/2023”.
+c. Display the names of products with the brand which have the highest rating.
+d. Display customers who stay in a particular city and bill amount > 50000.
+Program:
+
+  
+ 
+# Start MongoDB   
+mongosh
+
+# Create and select the database
+use OnlineShoppingDB
+
+# Create and insert documents into 'products' collection (5 records)
+db.products.insertMany([
+  { _id: 1, name: "Smartphone", brand: "Apple", warranty_period: 1, rating: 4.5, price: 70000 },
+  { _id: 2, name: "Laptop", brand: "Dell", warranty_period: 2, rating: 4.3, price: 50000 },
+  { _id: 3, name: "Headphones", brand: "Sony", warranty_period: 1, rating: 4.8, price: 15000 },
+  { _id: 4, name: "Smartwatch", brand: "Samsung", warranty_period: 1, rating: 4.2, price: 20000 },
+  { _id: 5, name: "Air Purifier", brand: "Dyson", warranty_period: 3, rating: 4.6, price: 30000 }
+])
+
+# Create and insert documents into 'customers' collection (5 records)
+db.customers.insertMany([
+  { _id: 1, name: "John Doe", city: "Mumbai", purchase_date: "2023-08-15", billamt: 70000 },
+  { _id: 2, name: "Jane Smith", city: "Pune", purchase_date: "2023-08-14", billamt: 40000 },
+  { _id: 3, name: "Rajesh Patil", city: "Mumbai", purchase_date: "2023-08-15", billamt: 60000 },
+  { _id: 4, name: "Anita Kumar", city: "Nagpur", purchase_date: "2023-08-13", billamt: 20000 },
+  { _id: 5, name: "Vikas Singh", city: "Mumbai", purchase_date: "2023-08-12", billamt: 50000 }
+])
+
+# a. List the names of products whose warranty period is one year
+db.products.find({ warranty_period: 1 }, { name: 1, _id: 0 })
+
+# b. List the customers who have done purchases on “15/08/2023”
+db.customers.find({ purchase_date: "2023-08-15" }, { name: 1, _id: 0 })
+
+# c. Display the names of products with the brand which have the highest rating
+db.products.find().sort({ rating: -1 }).limit(1)
+
+# d. Display customers who stay in Mumbai city and have a bill amount greater than 50000
+db.customers.find({ city: "Mumbai", billamt: { $gt: 50000 } }, { name: 1, city: 1, billamt: 1 })
+
+
